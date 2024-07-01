@@ -7,11 +7,12 @@ import com.samuel.security.demo2.app.model.UserEntity;
 import com.samuel.security.demo2.app.model.UserEntityDetailsImpl;
 import com.samuel.security.demo2.app.repository.UserRepository;
 import com.samuel.security.demo2.app.service.JwtService;
-import com.samuel.security.demo2.app.service.UserDetailsServiceImpl;
+//import com.samuel.security.demo2.app.service.UserDetailsServiceImpl;
 import com.samuel.security.demo2.app.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,9 +49,11 @@ public class UserEntityServiceImpl implements UserEntityService {
     @Override
     public LoginResponseDto userLogin(UserRequestDto userRequestDto) {
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                userRequestDto.getEmail(), userRequestDto.getPassword()
-        ));
+
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    userRequestDto.getEmail(), userRequestDto.getPassword()
+            ));
+
 
         UserEntity user = userRepository.findByEmail(userRequestDto.getEmail()).orElseThrow();
         UserDetails userDetails = UserEntityDetailsImpl.builder().user(user).build();
